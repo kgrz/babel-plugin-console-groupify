@@ -3,7 +3,7 @@
 exports[`works with a multiple log statements 1`] = `
 "
 function something() {
-	console.group('methodName');
+	console.group('something');
 
 	console.log('one');
 	console.log('two');
@@ -16,7 +16,7 @@ function something() {
 exports[`works with a multiple log statements, and a return statement 1`] = `
 "
 function something() {
-	console.group('methodName');
+	console.group('something');
 
 	console.log('one');
 	console.log('two');
@@ -30,7 +30,7 @@ function something() {
 exports[`works with a return statement 1`] = `
 "
 function something() {
-	console.group('methodName');
+	console.group('something');
 
 	console.log('wut');
 	console.groupEnd();
@@ -38,10 +38,32 @@ function something() {
 }"
 `;
 
+exports[`works with anonymous functions 1`] = `
+"
+const fun = function () {
+	console.group('anonymous function?');
+
+	console.log('one');
+	console.groupEnd();
+	return 0;
+};"
+`;
+
+exports[`works with arrow functions 1`] = `
+"
+const fun = () => {
+	console.group('anonymous function?');
+
+	console.log('one');
+	console.groupEnd();
+	return 0;
+};"
+`;
+
 exports[`wraps console.log inside a group 1`] = `
 "
 function something() {
-	console.group('methodName');
+	console.group('something');
 
 	console.log('wut');
 	console.groupEnd();

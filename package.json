@@ -10,8 +10,11 @@
   "debug": "babel-node --inspect-brk test.js"
  },
  "dependencies": {
-  "babel-core": "^6.26.0",
-  "babel-types": "^6.26.0",
-  "jest": "^21.2.1"
+  "babel-types": "^6.26.0"
+ },
+ "devDependencies": {
+	 "babel-cli": "^6.26.0",
+	 "babel-core": "^6.26.0",
+	 "jest": "^21.2.1"
  }
 }

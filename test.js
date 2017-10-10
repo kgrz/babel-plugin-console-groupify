@@ -55,3 +55,28 @@ it('works with a multiple log statements, and a return statement', () => {
 	const code = babel.transform(example, { plugins: [plugin] }).code;
 	expect(code).toMatchSnapshot();
 });
+
+it('works with anonymous functions', () => {
+	const example = `
+	const fun = function () {
+		console.log('one');
+		return 0;
+	}
+	`;
+
+	const code = babel.transform(example, { plugins: [plugin] }).code;
+	expect(code).toMatchSnapshot();
+});
+
+
+it('works with arrow functions', () => {
+	const example = `
+	const fun = () => {
+		console.log('one');
+		return 0;
+	}
+	`;
+
+	const code = babel.transform(example, { plugins: [plugin] }).code;
+	expect(code).toMatchSnapshot();
+});

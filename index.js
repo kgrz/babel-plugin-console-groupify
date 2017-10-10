@@ -31,11 +31,11 @@ const ConsoleLogCheckerVisitor = {
 	}
 }
 
-const generateGroupStart = () =>
+const generateGroupStart = functionLabel =>
 	t.expressionStatement(
 		t.callExpression(
 			t.memberExpression(t.identifier('console'), t.identifier('group')),
-			[ t.stringLiteral('methodName') ]
+			[ t.stringLiteral(functionLabel) ]
 		)
 	);
 
@@ -48,18 +48,30 @@ const generateGroupEnd = () =>
 		)
 	);
 
+const getName = parent => {
+	if (parent.node.id && parent.node.id.name) {
+		return parent.node.id.name;
+	}
+
+	return 'anonymous function?';
+}
+
 function ConsoleGroupify (babel) {
 	return {
 		visitor: {
 			BlockStatement: function (path) {
 				path.traverse(ConsoleLogCheckerVisitor, { stack: stack, gotReturn });
+
 				if (stack === 2) {
-					path.unshiftContainer('body', generateGroupStart());
+					const name = getName(path.getFunctionParent());
+
+					path.unshiftContainer('body', generateGroupStart(name));
 
 					if (gotReturn === 0) {
 						path.pushContainer('body', generateGroupEnd());
 					}
 				}
+
 				stack = 0;
 				gotReturn = 0;
 			}
