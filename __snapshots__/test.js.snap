@@ -1,5 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`maintains the hierarchy when multiple logs are encountered 1`] = `
+"
+function something() {
+	console.group('something');
+
+	console.log('whut');
+
+	function another() {
+		console.group('another');
+
+		console.log('wut');
+		console.groupEnd();
+	}
+	console.groupEnd();
+}"
+`;
+
 exports[`works with a multiple log statements 1`] = `
 "
 function something() {
@@ -60,6 +77,26 @@ const fun = () => {
 };"
 `;
 
+exports[`works with class function properties 1`] = `
+"
+class A {
+	constructor() {
+		this.componentWillReceiveProps = nextProps => {
+			console.group(\\"anonymous function?\\");
+			console.group(\\"anonymous function?\\");
+			console.group(\\"anonymous function?\\");
+
+			console.log(this.props);
+			console.log(nextProps);
+			console.groupEnd();
+			console.groupEnd();
+			console.groupEnd();
+		};
+	}
+
+}"
+`;
+
 exports[`works with class methods 1`] = `
 "
 class A {
@@ -80,5 +117,17 @@ function something() {
 
 	console.log('wut');
 	console.groupEnd();
+}"
+`;
+
+exports[`wraps only the inner console.log inside a group 1`] = `
+"
+function something() {
+	function another() {
+		console.group('another');
+
+		console.log('wut');
+		console.groupEnd();
+	}
 }"
 `;

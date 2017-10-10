@@ -2,8 +2,12 @@ const t = require('babel-types');
 
 let stack = 0;
 let gotReturn = 0;
+let skipGrouping = 0;
 
 const ConsoleLogCheckerVisitor = {
+	BlockStatement: function (path, args) {
+		path.stop();
+	},
 	Identifier: function (path, args) {
 		const name = path.node.name;
 
@@ -11,6 +15,11 @@ const ConsoleLogCheckerVisitor = {
 			if (stack === 0) {
 				stack++;
 			}
+		}
+
+		if (name === 'group' || name === 'groupEnd') {
+			skipGrouping = 1;
+			path.stop();
 		}
 
 		if (name === 'log') {
@@ -66,9 +75,12 @@ function ConsoleGroupify (babel) {
 			BlockStatement: function (path) {
 				path.traverse(ConsoleLogCheckerVisitor, { stack: stack, gotReturn });
 
+				if (skipGrouping === 1) {
+					path.stop();
+				}
+
 				if (stack === 2) {
 					const name = getName(path.getFunctionParent());
-
 					path.unshiftContainer('body', generateGroupStart(name));
 
 					if (gotReturn === 0) {
@@ -78,6 +90,7 @@ function ConsoleGroupify (babel) {
 
 				stack = 0;
 				gotReturn = 0;
+				skipGrouping = 0;
 			}
 		}
 	}

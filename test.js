@@ -1,5 +1,6 @@
 const babel = require('babel-core');
 const plugin = require('./index');
+const classPropertyTransformer = require('babel-plugin-transform-class-properties');
 
 console.group = jest.fn();
 console.groupEnd = jest.fn();
@@ -8,6 +9,34 @@ it('wraps console.log inside a group', () => {
 	const example = `
 	function something() {
 		console.log('wut');
+	}
+	`;
+
+	const code = babel.transform(example, { plugins: [plugin] }).code;
+	expect(code).toMatchSnapshot();
+});
+
+it('wraps only the inner console.log inside a group', () => {
+	const example = `
+	function something() {
+		function another() {
+			console.log('wut');
+		}
+	}
+	`;
+
+	const code = babel.transform(example, { plugins: [plugin] }).code;
+	expect(code).toMatchSnapshot();
+});
+
+it('maintains the hierarchy when multiple logs are encountered', () => {
+	const example = `
+	function something() {
+		console.log('whut');
+
+		function another() {
+			console.log('wut');
+		}
 	}
 	`;
 
@@ -92,5 +121,19 @@ it('works with class methods', () => {
 	`;
 
 	const code = babel.transform(example, { plugins: [plugin] }).code;
+	expect(code).toMatchSnapshot();
+});
+
+it('works with class function properties', () => {
+	const example = `
+	class A {
+		componentWillReceiveProps = (nextProps) => {
+			console.log(this.props);
+			console.log(nextProps)
+		}
+	}
+	`;
+
+	const code = babel.transform(example, { plugins: [plugin, classPropertyTransformer] }).code;
 	expect(code).toMatchSnapshot();
 });
