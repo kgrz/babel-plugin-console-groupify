@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`works with a multiple log statements 1`] = `
+"
+function something() {
+	console.group('methodName');
+
+	console.log('one');
+	console.log('two');
+	console.log('three');
+	console.log('four');
+	console.groupEnd();
+}"
+`;
+
+exports[`works with a multiple log statements, and a return statement 1`] = `
+"
+function something() {
+	console.group('methodName');
+
+	console.log('one');
+	console.log('two');
+	console.groupEnd();
+	return 0;
+	console.log('three');
+	console.log('four');
+}"
+`;
+
+exports[`works with a return statement 1`] = `
+"
+function something() {
+	console.group('methodName');
+
+	console.log('wut');
+	console.groupEnd();
+	return 1;
+}"
+`;
+
+exports[`wraps console.log inside a group 1`] = `
+"
+function something() {
+	console.group('methodName');
+
+	console.log('wut');
+	console.groupEnd();
+}"
+`;
