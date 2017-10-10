@@ -60,6 +60,19 @@ const fun = () => {
 };"
 `;
 
+exports[`works with class methods 1`] = `
+"
+class A {
+	componentWillReceiveProps(nextProps) {
+		console.group(\\"componentWillReceiveProps\\");
+
+		console.log(this.props);
+		console.log(nextProps);
+		console.groupEnd();
+	}
+}"
+`;
+
 exports[`wraps console.log inside a group 1`] = `
 "
 function something() {

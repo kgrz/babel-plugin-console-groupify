@@ -49,6 +49,10 @@ const generateGroupEnd = () =>
 	);
 
 const getName = parent => {
+	if (parent.node.key && parent.node.key.name) {
+		return parent.node.key.name;
+	}
+
 	if (parent.node.id && parent.node.id.name) {
 		return parent.node.id.name;
 	}

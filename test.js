@@ -80,3 +80,17 @@ it('works with arrow functions', () => {
 	const code = babel.transform(example, { plugins: [plugin] }).code;
 	expect(code).toMatchSnapshot();
 });
+
+it('works with class methods', () => {
+	const example = `
+	class A {
+		componentWillReceiveProps (nextProps) {
+			console.log(this.props);
+			console.log(nextProps)
+		}
+	}
+	`;
+
+	const code = babel.transform(example, { plugins: [plugin] }).code;
+	expect(code).toMatchSnapshot();
+});
