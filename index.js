@@ -1,42 +1,43 @@
 const t = require('babel-types');
 
-let stack = 0;
-let gotReturn = 0;
-let skipGrouping = 0;
-
 const ConsoleLogCheckerVisitor = {
 	BlockStatement: function (path, args) {
 		path.stop();
 	},
 	Identifier: function (path, args) {
 		const name = path.node.name;
+		let state = args.state;
 
 		if (name === 'console') {
-			if (stack === 0) {
-				stack++;
+			if (state.stack === 0) {
+				state.stack++;
 			}
 		}
 
 		if (name === 'group' || name === 'groupEnd') {
-			skipGrouping = 1;
+			state.gotConsoles = false;
+			state.gotGroup = true;
 			path.stop();
+			return;
 		}
 
 		if (name === 'log') {
-			if (stack === 1) {
-				stack++;
-
-				if (stack === 2) {
-					path.stop();
-				}
+			if (state.stack === 1) {
+				state.stack++;
 			}
+		}
+
+		if (state.stack === 2) {
+			state.gotConsoles = true;
+			path.stop();
+			return;
 		}
 	},
 	ReturnStatement: function (path, args) {
 		path.insertBefore(
 			generateGroupEnd()
 		);
-		gotReturn++;
+		args.state.gotReturn = true;
 	}
 }
 
@@ -73,24 +74,34 @@ function ConsoleGroupify (babel) {
 	return {
 		visitor: {
 			BlockStatement: function (path) {
-				path.traverse(ConsoleLogCheckerVisitor, { stack: stack, gotReturn });
+				let state = {
+					stack: 0,
+					gotConsoles: false,
+					gotGroup: false,
+					gotReturn: false
+				};
 
-				if (skipGrouping === 1) {
+				path.traverse(
+					ConsoleLogCheckerVisitor,
+					{ state }
+				);
+
+				if (state.gotGroup) {
 					path.stop();
+					return;
 				}
 
-				if (stack === 2) {
+				if (state.gotConsoles) {
 					const name = getName(path.getFunctionParent());
 					path.unshiftContainer('body', generateGroupStart(name));
 
-					if (gotReturn === 0) {
+					if (!state.gotReturn) {
 						path.pushContainer('body', generateGroupEnd());
 					}
-				}
 
-				stack = 0;
-				gotReturn = 0;
-				skipGrouping = 0;
+					path.stop();
+					return;
+				}
 			}
 		}
 	}
