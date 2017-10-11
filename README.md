@@ -66,4 +66,7 @@ prints out:
 
 ```
 
+![both-plugins-together](https://user-images.githubusercontent.com/400299/31443137-3550c386-aeb6-11e7-8fe1-1f75bb246255.jpg)
+
+
 **Note that both these plugins are at a pretty alpha quality.**
