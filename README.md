@@ -66,7 +66,32 @@ prints out:
 
 ```
 
+
+Actual screenshot from actual usage:
+
 ![both-plugins-together](https://user-images.githubusercontent.com/400299/31451006-90ae7798-aec8-11e7-8ca1-83bada8343f9.png)
 
-
 **Note that both these plugins are at a pretty alpha quality.**
+
+
+
+Usage
+-----
+
+Install the module with:
+
+```
+npm install --save babel-plugin-console-groupify
+```
+
+Include it in your babel configuration either via `.babelrc` or webpack.
+Here's a `.babelrc` example:
+
+```json
+{
+	"presets": [...],
+	"plugins": [
+		"console-groupify"
+	]
+}
+```
