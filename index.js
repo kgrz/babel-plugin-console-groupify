@@ -36,9 +36,12 @@ const ConsoleLogCheckerVisitor = {
 		}
 	},
 	ReturnStatement: function (path, args) {
-		path.insertBefore(
-			generateGroupEnd()
-		);
+		if (args.state.gotConsoles) {
+			path.insertBefore(
+				generateGroupEnd()
+			);
+		}
+
 		args.state.gotReturn = true;
 	}
 }

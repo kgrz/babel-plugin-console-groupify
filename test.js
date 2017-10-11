@@ -152,3 +152,14 @@ it('does not add a grouping if one is already present', () => {
 	const code = babel.transform(example, { plugins: [plugin, classPropertyTransformer] }).code;
 	expect(code).toMatchSnapshot();
 });
+
+it('does not add extra groupend just because of return', () => {
+	const example = `
+	function a () {
+	  return;
+	}
+	`;
+
+	const code = babel.transform(example, { plugins: [plugin, classPropertyTransformer] }).code;
+	expect(code).toMatchSnapshot();
+});

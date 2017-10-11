@@ -14,6 +14,13 @@ class A {
 }"
 `;
 
+exports[`does not add extra groupend just because of return 1`] = `
+"
+function a() {
+	return;
+}"
+`;
+
 exports[`maintains the hierarchy when multiple logs are encountered 1`] = `
 "
 function something() {
