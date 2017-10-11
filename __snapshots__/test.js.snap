@@ -1,5 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`does not add a grouping if one is already present 1`] = `
+"
+class A {
+	constructor() {
+		this.componentWillReceiveProps = nextProps => {
+			console.group('one');
+			console.log(this.props);
+			console.log(nextProps);
+		};
+	}
+
+}"
+`;
+
 exports[`maintains the hierarchy when multiple logs are encountered 1`] = `
 "
 function something() {
@@ -83,13 +97,9 @@ class A {
 	constructor() {
 		this.componentWillReceiveProps = nextProps => {
 			console.group(\\"anonymous function?\\");
-			console.group(\\"anonymous function?\\");
-			console.group(\\"anonymous function?\\");
 
 			console.log(this.props);
 			console.log(nextProps);
-			console.groupEnd();
-			console.groupEnd();
 			console.groupEnd();
 		};
 	}

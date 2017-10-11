@@ -2,7 +2,7 @@ const t = require('babel-types');
 
 const ConsoleLogCheckerVisitor = {
 	BlockStatement: function (path, args) {
-		path.stop();
+		path.skip();
 	},
 	Identifier: function (path, args) {
 		const name = path.node.name;
@@ -14,10 +14,14 @@ const ConsoleLogCheckerVisitor = {
 			}
 		}
 
-		if (name === 'group' || name === 'groupEnd') {
+		// We need to explicitly check for state.gotReturn because we add the
+		// console.groupEnd if we encounter a return statement in this
+		// visitor. And that will cause this flag to turn on and skip rest of
+		// the traversal.
+		if (name === 'group' || (name === 'groupEnd' && !state.gotReturn)) {
 			state.gotConsoles = false;
 			state.gotGroup = true;
-			path.stop();
+			path.skip();
 			return;
 		}
 
@@ -29,8 +33,6 @@ const ConsoleLogCheckerVisitor = {
 
 		if (state.stack === 2) {
 			state.gotConsoles = true;
-			path.stop();
-			return;
 		}
 	},
 	ReturnStatement: function (path, args) {
@@ -87,7 +89,7 @@ function ConsoleGroupify (babel) {
 				);
 
 				if (state.gotGroup) {
-					path.stop();
+					path.skip();
 					return;
 				}
 
@@ -98,9 +100,6 @@ function ConsoleGroupify (babel) {
 					if (!state.gotReturn) {
 						path.pushContainer('body', generateGroupEnd());
 					}
-
-					path.stop();
-					return;
 				}
 			}
 		}

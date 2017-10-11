@@ -137,3 +137,18 @@ it('works with class function properties', () => {
 	const code = babel.transform(example, { plugins: [plugin, classPropertyTransformer] }).code;
 	expect(code).toMatchSnapshot();
 });
+
+it('does not add a grouping if one is already present', () => {
+	const example = `
+	class A {
+		componentWillReceiveProps = (nextProps) => {
+			console.group('one');
+			console.log(this.props);
+			console.log(nextProps)
+		}
+	}
+	`;
+
+	const code = babel.transform(example, { plugins: [plugin, classPropertyTransformer] }).code;
+	expect(code).toMatchSnapshot();
+});
