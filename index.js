@@ -84,6 +84,10 @@ const getName = path => {
 				name = fParent.parent.id.name
 			}
 
+			if (fParent.node.id && fParent.node.id.name) {
+				name = fParent.node.id.name
+			}
+
 			if (fParent.parent.left && fParent.parent.left.property && fParent.parent.left.property.name) {
 				name = fParent.parent.left.property.name;
 			}
