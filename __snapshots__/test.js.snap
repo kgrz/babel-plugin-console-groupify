@@ -79,7 +79,7 @@ function something() {
 exports[`works with anonymous functions 1`] = `
 "
 const fun = function () {
-	console.group('anonymous function?');
+	console.group('fun');
 
 	console.log('one');
 	console.groupEnd();
@@ -90,7 +90,7 @@ const fun = function () {
 exports[`works with arrow functions 1`] = `
 "
 const fun = () => {
-	console.group('anonymous function?');
+	console.group('fun');
 
 	console.log('one');
 	console.groupEnd();
@@ -103,7 +103,7 @@ exports[`works with class function properties 1`] = `
 class A {
 	constructor() {
 		this.componentWillReceiveProps = nextProps => {
-			console.group(\\"anonymous function?\\");
+			console.group(\\"componentWillReceiveProps\\");
 
 			console.log(this.props);
 			console.log(nextProps);

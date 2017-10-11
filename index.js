@@ -63,16 +63,36 @@ const generateGroupEnd = () =>
 		)
 	);
 
-const getName = parent => {
-	if (parent.node.key && parent.node.key.name) {
-		return parent.node.key.name;
+const getName = path => {
+	// What to do with declareFunction type?
+	const fParent = path.findParent(p =>
+		p.isFunctionDeclaration() ||
+		p.isArrowFunctionExpression() ||
+		p.isClassMethod() ||
+		p.isFunctionExpression()
+	);
+
+	let name = 'anonymous function';
+
+	switch (fParent.type) {
+		case 'FunctionDeclaration':
+			name = fParent.node.id.name;
+			break;
+		case 'FunctionExpression':
+		case 'ArrowFunctionExpression':
+			if (fParent.parent.id && fParent.parent.id.name) {
+				name = fParent.parent.id.name
+			}
+
+			if (fParent.parent.left && fParent.parent.left.property && fParent.parent.left.property.name) {
+				name = fParent.parent.left.property.name;
+			}
+			break;
+		case 'ClassMethod':
+			name = fParent.node.key.name;
 	}
 
-	if (parent.node.id && parent.node.id.name) {
-		return parent.node.id.name;
-	}
-
-	return 'anonymous function?';
+	return name;
 }
 
 function ConsoleGroupify (babel) {
@@ -97,7 +117,7 @@ function ConsoleGroupify (babel) {
 				}
 
 				if (state.gotConsoles) {
-					const name = getName(path.getFunctionParent());
+					const name = getName(path);
 					path.unshiftContainer('body', generateGroupStart(name));
 
 					if (!state.gotReturn) {
