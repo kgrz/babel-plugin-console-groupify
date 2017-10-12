@@ -38,6 +38,36 @@ function something() {
 }"
 `;
 
+exports[`promises works with named functions as args to then 1`] = `
+"
+const a = new Promise((resolve, reject) => {
+	resolve(42);
+});
+
+const thenFunc = value => {
+	console.group(\\"thenFunc\\");
+
+	console.log(value);
+	console.groupEnd();
+};
+
+a.then(thenFunc);"
+`;
+
+exports[`works normally for async functions 1`] = `
+"
+const foo = () => {
+	console.group('foo');
+
+	console.log('this is foo');
+	console.groupEnd();
+};
+
+const bar = () => {
+	setTimeout(foo);
+};"
+`;
+
 exports[`works with a multiple log statements 1`] = `
 "
 function something() {

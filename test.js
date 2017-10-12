@@ -178,3 +178,23 @@ it('works normally for async functions', () => {
 	const code = babel.transform(example, { plugins: [plugin, classPropertyTransformer] }).code;
 	expect(code).toMatchSnapshot();
 });
+
+describe('promises', () => {
+	it('works with named functions as args to then', () => {
+		const example = `
+		const a = new Promise((resolve, reject) => {
+			resolve(42);
+		});
+
+		const thenFunc = (value) => {
+			console.log(value);
+		}
+
+		a.then(thenFunc);
+		`;
+
+		const code = babel.transform(example, { plugins: [plugin, classPropertyTransformer] }).code;
+		expect(code).toMatchSnapshot();
+	});
+});
+
