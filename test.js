@@ -163,3 +163,18 @@ it('does not add extra groupend just because of return', () => {
 	const code = babel.transform(example, { plugins: [plugin, classPropertyTransformer] }).code;
 	expect(code).toMatchSnapshot();
 });
+
+it('works normally for async functions', () => {
+	const example = `
+	const foo = () => {
+		console.log('this is foo');
+	}
+
+	const bar = () => {
+		setTimeout(foo);
+	}
+	`;
+
+	const code = babel.transform(example, { plugins: [plugin, classPropertyTransformer] }).code;
+	expect(code).toMatchSnapshot();
+});
