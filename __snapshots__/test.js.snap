@@ -64,7 +64,12 @@ const foo = () => {
 };
 
 const bar = () => {
+	console.group('bar');
+
+	console.log('this is bar');
 	setTimeout(foo);
+	console.log('this comes after the setTimeout');
+	console.groupEnd();
 };"
 `;
 

@@ -171,7 +171,9 @@ it('works normally for async functions', () => {
 	}
 
 	const bar = () => {
+		console.log('this is bar');
 		setTimeout(foo);
+		console.log('this comes after the setTimeout');
 	}
 	`;
 
@@ -197,4 +199,3 @@ describe('promises', () => {
 		expect(code).toMatchSnapshot();
 	});
 });
-
