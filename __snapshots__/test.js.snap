@@ -1,5 +1,56 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`adds correct indentation for early return cases in if statements 1`] = `
+"
+const foo = option => {
+	console.group('foo');
+
+	console.log('hi');
+
+	if (option) {
+		console.groupEnd();
+
+		return 'Early Return!';
+	}
+
+	console.groupEnd();
+	return 'Late Return!';
+};
+
+foo(true);
+foo(false);"
+`;
+
+exports[`adds correct indentation for early return cases in switch statements 1`] = `
+"
+const foo = option => {
+	console.group('foo');
+
+	console.log('hi');
+
+	switch (option.toLocaleString()) {
+		case 'true':
+			{
+				console.groupEnd();
+
+				return 'Early Return!';
+			}
+		case 'false':
+			{
+				console.groupEnd();
+
+				return 'Another Early Return!';
+			}
+	}
+
+	console.groupEnd();
+	return 'Late Return!';
+};
+
+foo(true);
+foo(false);"
+`;
+
 exports[`does not add a grouping if one is already present 1`] = `
 "
 class A {

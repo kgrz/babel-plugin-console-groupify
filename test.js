@@ -181,6 +181,51 @@ it('works normally for async functions', () => {
 	expect(code).toMatchSnapshot();
 });
 
+it('adds correct indentation for early return cases in if statements', () => {
+	const example = `
+	const foo = option => {
+		console.log('hi')
+
+		if (option) {
+			return 'Early Return!';
+		}
+
+		return 'Late Return!';
+	}
+
+	foo(true);
+	foo(false);
+	`;
+
+	const code = babel.transform(example, { plugins: [plugin, classPropertyTransformer] }).code;
+	expect(code).toMatchSnapshot();
+});
+
+it('adds correct indentation for early return cases in switch statements', () => {
+	const example = `
+	const foo = option => {
+		console.log('hi')
+
+		switch (option.toLocaleString()) {
+			case 'true': {
+				return 'Early Return!';
+			}
+			case 'false': {
+				return 'Another Early Return!';
+			}
+		}
+
+		return 'Late Return!';
+	}
+
+	foo(true);
+	foo(false);
+	`;
+
+	const code = babel.transform(example, { plugins: [plugin, classPropertyTransformer] }).code;
+	expect(code).toMatchSnapshot();
+});
+
 describe('promises', () => {
 	it('works with named functions as args to then', () => {
 		const example = `
