@@ -95,3 +95,21 @@ Here's a `.babelrc` example:
 	]
 }
 ```
+
+Known Issues
+------------
+
+* A spread operator inside a switch statement seems to be causing issues
+  when used with the `babel-transform-object-rest-spread` plugin. For
+  instance:
+
+  ```javascript
+
+  function myReducer (state = {}, action = {}) {
+    console.log('hi');
+    switch (action.type) {
+      case 'some_action':
+        return { ...state, key: value }
+    }
+  }
+  ```
