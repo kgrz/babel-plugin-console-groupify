@@ -48,6 +48,9 @@ const ConsoleLogCheckerVisitor = {
 
 		if (state.stack === 2) {
 			state.gotConsoles = true;
+			// Skip further traversal. We have what we need at this point.
+			path.skip();
+			return;
 		}
 	},
 	ReturnStatement: function (path, args) {
@@ -126,7 +129,6 @@ function ConsoleGroupify (babel) {
 				);
 
 				if (state.gotGroup) {
-					path.skip();
 					return;
 				}
 
