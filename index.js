@@ -1,5 +1,7 @@
 const t = require('babel-types');
 
+const ANONYMOUS_FUNCTION = 'anonymous function';
+
 const isNodeTypeAFunction = n =>
 	t.isFunctionDeclaration(n) ||
 	t.isArrowFunctionExpression(n) ||
@@ -47,7 +49,10 @@ const ConsoleLogCheckerVisitor = {
 		}
 
 		if (state.stack === 2) {
-			state.gotConsoles = true;
+			const name = getName(path);
+			if (name !== ANONYMOUS_FUNCTION) {
+				state.gotConsoles = true;
+			}
 			// Skip further traversal. We have what we need at this point.
 			path.skip();
 			return;
@@ -86,6 +91,10 @@ const getName = path => {
 	const fParent = path.findParent(p => isPathTypeAFunction(p));
 
 	let name = 'anonymous function';
+
+	if (!fParent) {
+		return name;
+	}
 
 	switch (fParent.type) {
 		case 'FunctionDeclaration':
@@ -134,7 +143,9 @@ function ConsoleGroupify (babel) {
 
 				if (state.gotConsoles) {
 					const name = getName(path);
-					path.unshiftContainer('body', generateGroupStart(name));
+					if (name !== ANONYMOUS_FUNCTION) {
+						path.unshiftContainer('body', generateGroupStart(name));
+					}
 
 					if (!state.gotReturn) {
 						path.pushContainer('body', generateGroupEnd());

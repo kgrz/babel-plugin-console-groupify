@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-console-groupify",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Wrap console.logs inside a block element (functions) inside a group with function's name",
   "main": "index.js",
   "author": "Kashyap Kondamudi",
@@ -19,11 +19,17 @@
     "babel-plugin-transform-class-properties": "^6.24.1",
     "jest": "^21.2.1"
   },
-  "keywords": [ "babel plugin", "console.log", "console.group" ],
+  "keywords": [
+    "babel plugin",
+    "console.log",
+    "console.group"
+  ],
   "bugs": {
     "url": "https://github.com/kgrz/babel-plugin-console-groupify/issues"
   },
-  "files": [ "index.js" ],
+  "files": [
+    "index.js"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/kgrz/babel-plugin-console-groupify.git"
