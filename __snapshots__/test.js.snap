@@ -164,13 +164,13 @@ function something() {
 
 exports[`works with anonymous functions 1`] = `
 "
-const fun = function () {
-	console.group('fun');
+setTimeout(function () {
+	console.group('anonymous function');
 
 	console.log('one');
 	console.groupEnd();
 	return 0;
-};"
+}, 0);"
 `;
 
 exports[`works with arrow functions 1`] = `

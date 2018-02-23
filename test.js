@@ -87,10 +87,10 @@ it('works with a multiple log statements, and a return statement', () => {
 
 it('works with anonymous functions', () => {
 	const example = `
-	const fun = function () {
+	setTimeout(function() {
 		console.log('one');
 		return 0;
-	}
+	}, 0);
 	`;
 
 	const code = babel.transform(example, { plugins: [plugin] }).code;
