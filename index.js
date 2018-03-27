@@ -15,9 +15,24 @@ const isPathTypeAFunction = p =>
 	p.isClassMethod() ||
 	p.isFunctionExpression();
 
+const ReturnInsideBlockChecker = {
+	ReturnStatement: function (path, args) {
+		args.state.gotReturnInsideBlock = true;
+	}
+}
+
 const ConsoleLogCheckerVisitor = {
 	BlockStatement: function (path, args) {
 		if (isNodeTypeAFunction(path.parent)) {
+			path.skip();
+		}
+
+		let state = {
+			gotReturnInsideBlock: false
+		}
+
+		path.traverse(ReturnInsideBlockChecker, { state });
+		if (!state.gotReturnInsideBlock) {
 			path.skip();
 		}
 	},

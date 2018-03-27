@@ -226,6 +226,25 @@ it('adds correct indentation for early return cases in switch statements', () =>
 	expect(code).toMatchSnapshot();
 });
 
+it('avoid unnecessary groups in deep hierarchies', () => {
+	const example = `
+	function request() {
+		if (true) {
+			// do something
+			if (true) {
+				// do something esle
+				if (true) {
+					console.log('whaaat!')
+				}
+			}
+		}
+	}
+	`
+
+	const code = babel.transform(example, { plugins: [plugin, classPropertyTransformer] }).code;
+	expect(code).toMatchSnapshot();
+});
+
 describe('promises', () => {
 	it('works with named functions as args to then', () => {
 		const example = `

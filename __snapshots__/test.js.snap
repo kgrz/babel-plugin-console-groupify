@@ -51,6 +51,24 @@ foo(true);
 foo(false);"
 `;
 
+exports[`avoid unnecessary groups in deep hierarchies 1`] = `
+"
+function request() {
+	if (true) {
+		// do something
+		if (true) {
+			// do something esle
+			if (true) {
+				console.group('request');
+
+				console.log('whaaat!');
+				console.groupEnd();
+			}
+		}
+	}
+}"
+`;
+
 exports[`does not add a grouping if one is already present 1`] = `
 "
 class A {
