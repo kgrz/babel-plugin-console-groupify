@@ -65,7 +65,8 @@ const ConsoleLogCheckerVisitor = {
 
 		if (state.stack === 2) {
 			const name = getName(path);
-			if (name !== ANONYMOUS_FUNCTION) {
+			// Skip adding the groups if there's a return before the console.log
+			if (name !== ANONYMOUS_FUNCTION && !args.state.gotReturn) {
 				state.gotConsoles = true;
 			}
 			// Skip further traversal. We have what we need at this point.

@@ -263,3 +263,21 @@ describe('promises', () => {
 		expect(code).toMatchSnapshot();
 	});
 });
+
+describe("console.log after early return", () => {
+  it("skips grouping to avoid deep nesting during loops", () => {
+    const example = `
+		function something() {
+			return null;
+			console.log('wut');
+		}
+
+		// this usage should not create too many nested logs
+		for (var i = 0; i < 10; ++i) {
+			something();
+		}
+			`;
+	const code = babel.transform(example, { plugins: [plugin, classPropertyTransformer] }).code;
+	expect(code).toMatchSnapshot();
+  });
+});

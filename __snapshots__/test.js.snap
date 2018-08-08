@@ -69,6 +69,19 @@ function request() {
 }"
 `;
 
+exports[`console.log after early return skips grouping to avoid deep nesting during loops 1`] = `
+"
+function something() {
+	return null;
+	console.log('wut');
+}
+
+// this usage should not create too many nested logs
+for (var i = 0; i < 10; ++i) {
+	something();
+}"
+`;
+
 exports[`does not add a grouping if one is already present 1`] = `
 "
 class A {
