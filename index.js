@@ -2,36 +2,20 @@ const t = require('babel-types');
 
 const ANONYMOUS_FUNCTION = 'anonymous function';
 
-const isNodeTypeAFunction = n =>
-	t.isFunctionDeclaration(n) ||
-	t.isArrowFunctionExpression(n) ||
-	t.isClassMethod(n) ||
-	t.isFunctionExpression(n);
-
-// What to do with declareFunction type?
-const isPathTypeAFunction = p =>
-	p.isFunctionDeclaration() ||
-	p.isArrowFunctionExpression() ||
-	p.isClassMethod() ||
-	p.isFunctionExpression();
-
-const ReturnInsideBlockChecker = {
-	ReturnStatement: function (path, args) {
-		args.state.gotReturnInsideBlock = true;
-	}
-}
-
 const ConsoleLogCheckerVisitor = {
 	BlockStatement: function (path, args) {
-		if (isNodeTypeAFunction(path.parent)) {
+		if (t.isFunction(path.parent)) {
 			path.skip();
 		}
 
-		let state = {
-			gotReturnInsideBlock: false
-		}
+		let state = { gotReturnInsideBlock: false }
 
-		path.traverse(ReturnInsideBlockChecker, { state });
+		path.traverse({
+			ReturnStatement: function (path, args) {
+				args.gotReturnInsideBlock = true;
+			}
+		}, state);
+
 		if (!state.gotReturnInsideBlock) {
 			path.skip();
 		}
@@ -104,9 +88,9 @@ const generateGroupEnd = () =>
 
 
 const getName = path => {
-	const fParent = path.findParent(p => isPathTypeAFunction(p));
+	const fParent = path.findParent(p => t.isFunction(p));
 
-	let name = 'anonymous function';
+	let name = ANONYMOUS_FUNCTION;
 
 	if (!fParent) {
 		return name;
