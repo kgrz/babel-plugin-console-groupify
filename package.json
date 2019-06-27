@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-console-groupify",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Wrap console.logs inside a block element (functions) inside a group with function's name",
   "main": "index.js",
   "author": "Kashyap Kondamudi",
@@ -11,6 +11,9 @@
   },
   "dependencies": {
     "babel-types": "^6.26.0"
+  },
+  "peerDependencies": {
+  	"babel-core": "^6.x.x"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
